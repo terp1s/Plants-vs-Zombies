@@ -5,11 +5,12 @@ using UnityEngine;
 public class FollowMouse : MonoBehaviour
 {
     Vector2 mousePos;
-    public GameObject bgr;
+    public Transform bgr;
 
     private void Awake()
     {
-        bgr = GameObject.Find("Background");
+        //bgr = GameObject.Find("BackgroundSquare");
+        bgr = gameObject.transform.parent;
 
         enabled = false;
 
@@ -23,20 +24,19 @@ public class FollowMouse : MonoBehaviour
 
     private void OnEnable()
     {
-
-        foreach (Transform child in bgr.transform)
+        foreach (Transform child in bgr.Find("BackgroundSquare"))
         {
             foreach (Transform child2 in child.transform)
             {
-
                 if(child2.GetComponent<PutDown>() != null)
                 {
                     child2.GetComponent<PutDown>().enabled = true;
                     child2.GetComponent<PutDown>().plantFlw = gameObject;
-                }
-               
+                }               
             }
 
         }
+
+        LevelDataProcessor.Instance.isPutEnabled = true;
     }
 }

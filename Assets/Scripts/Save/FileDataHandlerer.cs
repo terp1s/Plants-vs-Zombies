@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using System;
 
-public class FileDataHandlerer : MonoBehaviour
+public class FileDataHandlerer
 {
     private string directFilePath = "";
 
@@ -22,6 +22,8 @@ public class FileDataHandlerer : MonoBehaviour
 
         Save loadedSave = null;
         
+        Debug.Log(fullPath);
+
         if (File.Exists(fullPath))
         {
             try

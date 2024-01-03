@@ -11,19 +11,23 @@ public class XMLManager : MonoBehaviour
 {
     public static XMLManager instance;
     public LevelDatabase levelDatabase;
+    public LevelManager levelManager;
 
     private void Awake()
     {
-        instance = this;
-        levelDatabase = Load();
-        GameObject.Find("LevelManager").GetComponent<LevelManager>().LoadDatabase(levelDatabase);
+        if (instance == null)
+        {
+            DontDestroyOnLoad(this);
+            levelDatabase = Load();
+            levelManager.GetComponent<LevelManager>().LoadDatabase(levelDatabase);
 
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }  
     }
-
-    private void Start()
-    {
-    }
-
     public LevelDatabase Load()
     {
         string dirPath = Path.Combine(Application.dataPath, "StreamingFiles");
@@ -40,20 +44,8 @@ public class XMLManager : MonoBehaviour
         FileStream filestream = new FileStream(fullPath, FileMode.Open);
         levelDatabase = serializer.Deserialize(filestream) as LevelDatabase;
 
-        //FileStream filesave = new FileStream(fullPath, FileMode.Create);
-        //LevelDatabase lvl = new LevelDatabase();
-        //XMLSave save = new XMLSave();
-        //save.lvl = 1;
-        //save.zombieCount = 1;
-        //save.Zombies = new List<string> { "Zombie" };
-        //save.newUnlockedPlants = new List<string> { "Peaflower" };
-        //lvl.Add(save);
-        //serializer.Serialize(filesave, lvl);
-
         return levelDatabase;
     }
-
-    
 }
 
 

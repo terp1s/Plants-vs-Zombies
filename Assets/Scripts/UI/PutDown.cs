@@ -9,12 +9,12 @@ public class PutDown : MonoBehaviour
     public bool isMouse;
     public bool hasPlant = false;
     public GameObject plantFlw;
-    public GameObject bgr;
+    public Transform bgr;
 
     private void Awake()
     {
         enabled = false;
-        bgr = GameObject.Find("Background");
+        bgr = gameObject.transform.parent.parent;
     }
 
     private void Update()
@@ -31,33 +31,27 @@ public class PutDown : MonoBehaviour
                 plantFlw.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
                 plantFlw.GetComponent<SpriteRenderer>().sortingLayerName = "Plants";
                 plantFlw.GetComponent<SpriteRenderer>().sortingOrder = 0;
+                plantFlw.GetComponent<ChildSpawn>().enabled = true;
                 hasPlant = true;
-
-
 
                 foreach (Transform child in bgr.transform)
                 {
                     foreach (Transform child2 in child.transform)
                     {
-
                         if (child2.GetComponent<PutDown>() != null)
                         {
                             child2.GetComponent<PutDown>().enabled = false;
                             child2.GetComponent<PutDown>().plantFlw = null;
                         }
-
                     }
-
-
                 }
+
+                LevelDataProcessor.Instance.isPutEnabled = false;
             }
-
-
         }
     }
     private void OnMouseExit()
     {
         isMouse = false;
     }
-
 }

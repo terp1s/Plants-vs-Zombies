@@ -6,64 +6,76 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour, IDataPersistance
+public class LevelManager : MonoBehaviour
 {
     public LevelDatabase levelDatabase;
     public static LevelManager Instance;
 
-    public void Start()
+    private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
-            Instance = this;
             DontDestroyOnLoad(this);
-            CompleteDatabase(levelDatabase.lvls.Count);
-            LoadLevel(1);
-
+            Instance = this;
         }
         else
         {
             Destroy(gameObject);
-
         }
-    
     }
     public void LoadDatabase(LevelDatabase dat)
     {
         levelDatabase = dat;
+        CompleteDatabase(levelDatabase.lvls.Count);
     }
-    public void LoadSave(Save save)
+    public void LoadGame(int level)
     {
-        LoadLevel(save.lvl);
+        StartCoroutine(LoadNewLevel(level));
     }
-    public void SaveSave(ref Save save)
-    {
-        save.lvl = GameObject.Find("LevelManager").GetComponent<LevelDataProcessor>().CurrentLevel();
-    }
-    public void LoadLevel(int index)
+    public void LoadLevelData(int index)
     {
         XMLSave currSave = levelDatabase.lvls[index - 1];
 
-        GameObject.Find("LevelManager").GetComponent<LevelDataProcessor>().LoadData(currSave);
-
+        LevelDataProcessor.Instance.LoadData(currSave);
+    }
+    public void RestartLevel()
+    {
+        LoadGame(LevelDataProcessor.Instance.CurrentLevel());
     }
     public void NextLevel()
     {
-        Debug.Log("jee");
-        try
+        PlayerPrefs.SetInt("level" + PlayerPrefs.GetInt("activePlayer"), PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")) + 1);
+        StartCoroutine(Victory());
+    }
+    IEnumerator LoadNewLevel(int index)
+    {
+        SceneManager.LoadScene("Level");
+
+        for (int i = 0; i < 2; i++)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            LoadLevel(GameObject.Find("LevelManager").GetComponent<LevelDataProcessor>().levelData.levelIndex + 1);
+            yield return null;
         }
-        catch (Exception e)
+
+        LoadLevelData(index);
+
+        StopAllCoroutines();
+    }
+    IEnumerator Victory()
+    {
+        Time.timeScale = 0f;
+        GameObject.Find("Canvas").transform.Find("Victory").gameObject.SetActive(true);
+
+        for (int i = 0; i < 2; i++)
         {
-            Debug.Log(e);
+            yield return new WaitForSecondsRealtime(1f);
         }
+
+        StartCoroutine(LoadNewLevel(LevelDataProcessor.Instance.levelData.levelIndex + 1));
+        Time.timeScale = 1f;
+        GameObject.Find("Canvas").transform.Find("Victory").gameObject.SetActive(false);
     }
     public bool CheckForNextLevel()
     {
-        Debug.Log(GameObject.FindGameObjectsWithTag("Zombie").Length);
-        
         if (GameObject.FindGameObjectsWithTag("Zombie").Length == 0)
         {
             NextLevel();
@@ -77,7 +89,6 @@ public class LevelManager : MonoBehaviour, IDataPersistance
     }
     public void CompleteDatabase(int datCount)
     {
-
         foreach (string s in levelDatabase.lvls[0].newUnlockedPlants)
         {
             levelDatabase.lvls[0].unlockedPlants.Add(s);

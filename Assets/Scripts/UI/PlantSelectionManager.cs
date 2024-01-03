@@ -13,16 +13,15 @@ public class PlantSelectionManager : MonoBehaviour, IXMLDataHandlerer
 
         foreach(GameObject plant in plants)
         {
-            Debug.Log(plant);   
             string naame = plant.name + "UI";
-            Instantiate(UIs.Find(item => item.name == naame), this.transform.position + new Vector3(50 * i, 0), Quaternion.identity, this.transform);
-            i++;
+            GameObject go = Instantiate(UIs.Find(item => item.name == naame), this.transform);
+            go.transform.localPosition = new Vector2(-70, 175 + (94*i));
+            i--;
         }
     }
     public void Load(LevelData data)
     {
         plants = data.unlockedPlants;
-        Debug.Log(plants[0].name);
         Display();
     }
 }

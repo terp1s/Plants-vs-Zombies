@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
 {
+    public GameObject levelManager;
+    public GameObject bgrSquare;
+    public GameObject Background;
+
     public float width, height;
     Vector2 vector;
 
@@ -19,9 +23,14 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
 
     void Start()
     {
-        vector = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        vector = bgrSquare.transform.localScale;
         width = vector.x;
-        height = vector.y;
+        height = vector.y;   
+    }
+
+    public void Load(LevelData data)
+    {
+        zombieCount = data.zombieCount;
 
         //spawn slunicka
         InvokeRepeating("SpawnSlunicko", slunickoStartdelay, slunickoRepeatRate);
@@ -29,44 +38,33 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
         //spawn zombiky
         InvokeRepeating("SpawnZombik", zombikStartDelay, zombikRepeatRate);
     }
-
-    public void Load(LevelData data)
-    {
-        zombieCount = data.zombieCount;
-        Debug.Log("load zombiku" + zombieCount);
-    }
-
     public void SpawnZombik()
     {
         if(zombieCount > 0)
         {
-            go = Instantiate(zombik, new Vector2(width, (height - (Random.Range(1, 6) * (GameObject.Find("Background").transform.lossyScale.y / 6)))), gameObject.transform.rotation, GameObject.Find("Background").transform);
-            
+            go = Instantiate(zombik, Background.transform);
+            go.transform.position = new Vector2(width + 1, height - ((Random.Range(1, 6) - 0.4f) * (bgrSquare.transform.lossyScale.y / 5)));
+
             zombieCount--;
-            Debug.Log(zombieCount);
         }
         else
         {
             cor = StartCoroutine(CallNextLvl());
             CancelInvoke("SpawnZombik");
         }
-        
     }
     IEnumerator  CallNextLvl()
     {
-        while (GameObject.Find("LevelManager").GetComponent<LevelManager>().CheckForNextLevel() == false)
+        while (LevelManager.Instance.CheckForNextLevel() == false)
         {
-            GameObject.Find("LevelManager").GetComponent<LevelManager>().CheckForNextLevel();
-            Debug.Log("huraa");
+            LevelManager.Instance.CheckForNextLevel();
 
             yield return null;
         }
-        Debug.Log("koneec");
-        
     }
     void SpawnSlunicko()
     {
-        go = Instantiate(slunicko, new Vector2(Random.Range(-width+5, width), height), gameObject.transform.rotation, GameObject.Find("Background").transform);
+        go = Instantiate(slunicko, new Vector2(Random.Range(-width + 5, width), height + 3), gameObject.transform.rotation, Background.transform);
         go.GetComponent<SunMovement>().isFromFlower = false;
     }
 }

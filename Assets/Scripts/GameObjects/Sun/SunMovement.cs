@@ -11,7 +11,7 @@ public class SunMovement : MonoBehaviour
     public float speed;
 
     public int fallCount;
-    public int index;
+    public string index;
 
     public Collider2D coll;
     public Collider2D accColl;
@@ -25,7 +25,7 @@ public class SunMovement : MonoBehaviour
         {
             //pri spawnuni slunicka slunecnici se vystreli v random smeru. Pouzivam floaty, pac je to pak rozmanitejsi
             rb.AddForce(new Vector2(Random.Range(-1.5f, 1.5f), Random.Range(5f, 7f)), ForceMode2D.Impulse);
-            index = int.Parse(gameObject.transform.parent.parent.name.Substring(4));
+            index = gameObject.transform.parent.parent.name.Substring(4);
             name2 = "TileFloor" + index;
 
         }
@@ -57,8 +57,6 @@ public class SunMovement : MonoBehaviour
        
         if (isFromFlower)
         {
-            Debug.Log(gameObject.transform.parent.parent.Find(name2).GetComponent<BoxCollider2D>());
-
             if (collision == gameObject.transform.parent.parent.Find(name2).GetComponent<Collider2D>())
             {
                 rb.velocity = Vector2.zero;

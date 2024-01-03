@@ -7,22 +7,23 @@ public class ChildSpawn : MonoBehaviour
     public GameObject child;
     public float repeatRate;
     public float startDelay;
+    public GameObject bgr;
 
-
-    // Start is called before the first frame update
     void Start()
     {
        //opakovany spawn po urcitem case
        InvokeRepeating("Spawn", startDelay, repeatRate);
+
+        bgr = GameObject.Find("Background");
     }
     void Spawn()
     {
-        GameObject go = Instantiate(child, gameObject.transform.position , gameObject.transform.rotation, gameObject.transform);
+        GameObject go = Instantiate(child, gameObject.transform.position , gameObject.transform.rotation, bgr.transform);
+        go.transform.parent = gameObject.transform;
 
         if (go.CompareTag("Sun"))
         {
             go.GetComponent<SunMovement>().isFromFlower = true;
         }
-
     }
 }

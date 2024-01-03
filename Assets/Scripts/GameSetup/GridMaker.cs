@@ -8,38 +8,42 @@ public class GridMaker : MonoBehaviour
     public GameObject policko;
     public GameObject tileFloor;
     public GameObject tileFull;
+    public GameObject bgrSquare;
 
     public float width, height;
     public float Startx, Starty;
 
     public Vector2 rozmeryObr;
 
-    float polickaNaVysku = 5;
-    float polickaNaSirku = 10;
+    float polickaNaVysku = 5f;
+    float polickaNaSirku = 9f;
     public Vector2 rozmerPolicek;
 
 
     void Start()
     {
-        rozmeryObr = GameObject.Find("Background").transform.lossyScale;
+        rozmeryObr = bgrSquare.transform.lossyScale;
 
         width = rozmeryObr.x;
         height = rozmeryObr.y;
 
-        rozmerPolicek.x = (GameObject.Find("Background").transform.lossyScale.x / (polickaNaSirku + 1));
-        rozmerPolicek.y = (GameObject.Find("Background").transform.lossyScale.y / (polickaNaVysku + 1));
+        rozmerPolicek.x = width / polickaNaSirku;
+        rozmerPolicek.y = height / polickaNaVysku;
 
-        Startx = -width/2 + 3;
-        Starty = height/2 - rozmerPolicek.y;
+        //Startx = -width/2 + 3;
+        //Starty = height/2 - rozmerPolicek.y;
 
-        float rescalex = 1 / (polickaNaVysku + 1);
-        float rescaley = 1 / (polickaNaSirku + 1);
+        Startx = 3f -width/2;
+        Starty = -3f + height/2;
+
+        float rescaley = 1f / (polickaNaVysku);
+        float rescalex = 1f / (polickaNaSirku);
 
         for (float i = 0; i < polickaNaVysku; i++)
         {
-            for (float j = 0;j < 10; j++)
+            for (float j = 0;j < 9; j++)
             {
-                GameObject pol = Instantiate(policko, new Vector2(Startx + (j * rozmerPolicek.x), Starty - (i * rozmerPolicek.y)), Quaternion.identity, (GameObject.Find("Background").transform));
+                GameObject pol = Instantiate(policko, new Vector2(Startx + (j * rozmerPolicek.x), Starty - (i * rozmerPolicek.y)), Quaternion.identity, bgrSquare.transform);
                 GameObject child1 = Instantiate(tileFloor, pol.transform.position, Quaternion.identity, pol.transform);
                 GameObject child2 = Instantiate(tileFull, pol.transform.position, Quaternion.identity, pol.transform);
 
@@ -49,8 +53,8 @@ public class GridMaker : MonoBehaviour
 
 
 
-                pol.transform.localScale = new Vector2(rescaley, rescalex);
-                
+                pol.transform.localScale = new Vector2(rescalex, rescaley);
+
             }
         }
     }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Move : MonoBehaviour
 {
@@ -12,20 +14,14 @@ public class Move : MonoBehaviour
     private float topBound;
     private float bottomBound;
 
-    private Vector2 bgr;
+    private Camera cam;
+    private GameObject bgr;
 
-    // Start is called before the first frame update
     void Start()
     {
-        bgr = GameObject.Find("Background").transform.lossyScale;
-
-        rightBound = bgr.x / 2;
-        leftBound = -bgr.x / 2;
-        topBound = (bgr.y / 2) + 5;
-        bottomBound = -bgr.y / 2;
+        bgr = GameObject.Find("Background");
+        cam = Camera.main;
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (gameObject.CompareTag("Zombie"))
@@ -37,21 +33,16 @@ public class Move : MonoBehaviour
             transform.Translate(Vector2.right * Time.deltaTime * speed);
         }
         
+        Vector2 viewPos = cam.WorldToViewportPoint(gameObject.transform.position);
 
-        Vector2 pos = gameObject.transform.position;
-
-        if (pos.x > rightBound || pos.x < leftBound || pos.y < bottomBound || pos.y > topBound + 5) 
+        if (gameObject.CompareTag("Zombie") && viewPos.x < 0.2f)
         {
-            
+            GameObject.Find("GameManager").GetComponent<GameOver>().gameOver = true;
+        }
 
-            if(gameObject.CompareTag("Zombie") && pos.x < leftBound)
-            {
-                GameObject.Find("GameManager").GetComponent<GameOver>().gameOver = true;
-            }
-
-            Destroy(gameObject);
-
+        if (viewPos.x > 1f || viewPos.x < 0f || viewPos.y > 1.5f || viewPos.y < 0f)
+        {
+            Destroy(gameObject);  
         }
     }
-
 }

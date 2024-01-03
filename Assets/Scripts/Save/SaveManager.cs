@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.IO;
 
 public class SaveManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
+        fileName = "save.json";
         if (Instance != null)
         {
             Debug.LogError("uz manager existuje :((");
@@ -35,8 +37,8 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame()
     {
-        fileDataHandlerer.Load();
-
+        save = fileDataHandlerer.Load();
+        Debug.Log("load game");
         if(this.save == null)
         {
             Debug.Log("zadna savenuta hra, jede se od znova juhu");
@@ -65,7 +67,6 @@ public class SaveManager : MonoBehaviour
     private List<IDataPersistance> FindAllPersistanceObjects()
     {
         IEnumerable<IDataPersistance> persistanceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistance>();
-
-        return new List<IDataPersistance>(dataPersistanceObjects);
+        return new List<IDataPersistance>(persistanceObjects);
     }
 }
