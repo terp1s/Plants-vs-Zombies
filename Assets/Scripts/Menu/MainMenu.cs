@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class MainMenu : MonoBehaviour
 {
@@ -30,5 +31,19 @@ public class MainMenu : MonoBehaviour
     public void DeletePref()
     {
         PlayerPrefs.DeleteAll();
+
+        int i = 1;
+
+        foreach (Transform child in playerSlots.transform)
+        {
+            if (child.name.Contains("Slot"))
+            {
+                
+                 child.GetComponentInChildren<TextMeshProUGUI>().text = "Slot " + i;
+                
+
+                i++;
+            }
+        }
     }
 }

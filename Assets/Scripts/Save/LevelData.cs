@@ -6,8 +6,8 @@ using UnityEngine;
 public class LevelData
 {
     public List<GameObject> unlockedPlants;
-    public List<GameObject> zombies;
+    public List<GameObject> ghosts;
     public int levelIndex;
-    public int zombieCount;
+    public int ghostCount;
     public bool isDay;
 }

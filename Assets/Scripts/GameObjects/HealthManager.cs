@@ -8,28 +8,28 @@ public class HealthManager : MonoBehaviour
 
     public  int currentHealth;
     public int maxHealth;
-
     public int afflDmg;
-
     void Start()
     {
         currentHealth = maxHealth;
     }
-
     public void Dmg(int dmg)
     {
         // dmg =/= afflDmg pri kolizi se pouziva affDmg ze skriptu collideru
         currentHealth -= dmg;
     }
-
     public void Update()
     {
         //smrt :((
 
         if (currentHealth <= 0) 
-        { 
+        {
+            if (CompareTag("Plant"))
+            {
+                gameObject.transform.parent.GetComponentInChildren<PutDown>().hasPlant = false;
+            }
+
             Destroy(gameObject);
         }
     }
-
 }

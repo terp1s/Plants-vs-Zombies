@@ -9,19 +9,14 @@ public class FollowMouse : MonoBehaviour
 
     private void Awake()
     {
-        //bgr = GameObject.Find("BackgroundSquare");
         bgr = gameObject.transform.parent;
-
         enabled = false;
-
     }
-
     private void Update()
     {       
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector2(mousePos.x, mousePos.y);
     }
-
     private void OnEnable()
     {
         foreach (Transform child in bgr.Find("BackgroundSquare"))
@@ -34,7 +29,6 @@ public class FollowMouse : MonoBehaviour
                     child2.GetComponent<PutDown>().plantFlw = gameObject;
                 }               
             }
-
         }
 
         LevelDataProcessor.Instance.isPutEnabled = true;

@@ -30,9 +30,7 @@ public class GridMaker : MonoBehaviour
         rozmerPolicek.x = width / polickaNaSirku;
         rozmerPolicek.y = height / polickaNaVysku;
 
-        //Startx = -width/2 + 3;
-        //Starty = height/2 - rozmerPolicek.y;
-
+       
         Startx = 3f -width/2;
         Starty = -3f + height/2;
 
@@ -51,12 +49,8 @@ public class GridMaker : MonoBehaviour
                 child1.transform.name = tileFloor.name + i + j;
                 child2.transform.name = tileFull.name + i + j;
 
-
-
                 pol.transform.localScale = new Vector2(rescalex, rescaley);
-
             }
         }
     }
-
 }

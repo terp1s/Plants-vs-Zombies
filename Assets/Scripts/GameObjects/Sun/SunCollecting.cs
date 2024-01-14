@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class SunCollecting : MonoBehaviour
 {
-    public int score;
+    public GameObject score;
+    public int scoreValue;
     void Start()
     {
-        score = int.Parse(GameObject.Find("SunScore").GetComponentInChildren<TMP_Text>().text);
+        score = GameObject.Find("Score");
     }
     void Update()
     {
@@ -19,9 +20,10 @@ public class SunCollecting : MonoBehaviour
             
             if (GetComponent<BoxCollider2D>().OverlapPoint(mousePosition))
             {
+                scoreValue = int.Parse(score.GetComponent<TMP_Text>().text);
                 Destroy(gameObject);
-                score += 150;
-                GameObject.Find("SunScore").GetComponentInChildren<TMP_Text>().text = score.ToString();
+                scoreValue += 25;
+                score.GetComponentInChildren<TMP_Text>().text = scoreValue.ToString();
             }
         }
     }

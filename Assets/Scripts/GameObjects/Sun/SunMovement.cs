@@ -14,7 +14,6 @@ public class SunMovement : MonoBehaviour
     public string index;
 
     public Collider2D coll;
-    public Collider2D accColl;
 
     string name2;
     void Start()
@@ -28,6 +27,7 @@ public class SunMovement : MonoBehaviour
             index = gameObject.transform.parent.parent.name.Substring(4);
             name2 = "TileFloor" + index;
 
+            coll = gameObject.transform.parent.parent.Find(name2).GetComponent<Collider2D>();
         }
         else
         {
@@ -43,43 +43,45 @@ public class SunMovement : MonoBehaviour
         if (isFromFlower == false)
         {
             transform.Translate(Vector2.down * Time.deltaTime * speed);
-
         }
         yield return new WaitForEndOfFrame();
 
         StartCoroutine(Fall());
-
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        accColl = collision;
-       
         if (isFromFlower)
         {
-            if (collision == gameObject.transform.parent.parent.Find(name2).GetComponent<Collider2D>())
+            if (collision == coll)
             {
                 rb.velocity = Vector2.zero;
                 rb.position = rb.position;
                 rb.gravityScale = 0;
             }
-           
-
         }
-        else if (isFromFlower == false)
+        else if (isFromFlower == false && collision.gameObject.CompareTag("Ground"))
         {
             if(fallCount == 0)
             {
                 StopAllCoroutines();
                 rb.velocity = Vector2.zero;
                 rb.position = rb.position;
+
+                StartCoroutine(Timer());
             }
             else
             {
                 fallCount--;
             }
-        }
-        
+        }        
     }
+    IEnumerator Timer()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+        }
 
+        Destroy(gameObject);
+    }
 }

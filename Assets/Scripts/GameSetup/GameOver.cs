@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameOver : MonoBehaviour
 {
     public bool gameOver = false;
+    public Canvas canvas;
 
     private void Update()
     {
@@ -17,6 +18,6 @@ public class GameOver : MonoBehaviour
     public void GameOverScene()
     {
         Time.timeScale = 0f;
-        GameObject.Find("Canvas").transform.Find("GameOver").gameObject.SetActive(true);
+        canvas.transform.Find("GameOver").gameObject.SetActive(true);
     }
 }

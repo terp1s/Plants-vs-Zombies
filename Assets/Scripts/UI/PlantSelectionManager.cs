@@ -15,7 +15,7 @@ public class PlantSelectionManager : MonoBehaviour, IXMLDataHandlerer
         {
             string naame = plant.name + "UI";
             GameObject go = Instantiate(UIs.Find(item => item.name == naame), this.transform);
-            go.transform.localPosition = new Vector2(-70, 175 + (94*i));
+            go.transform.localPosition = new Vector2(0, 186 + (71*i));
             i--;
         }
     }

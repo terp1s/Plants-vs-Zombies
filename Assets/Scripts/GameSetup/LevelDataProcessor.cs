@@ -32,9 +32,9 @@ public class LevelDataProcessor : MonoBehaviour
 
         levelData.unlockedPlants = FindInGame(save.unlockedPlants);
         levelData.levelIndex = save.lvl;
-        levelData.zombieCount = save.ghostCount;
+        levelData.ghostCount = save.ghostCount;
         levelData.isDay = save.isDay;
-        levelData.zombies = FindInGame(save.Ghosts);
+        levelData.ghosts = FindInGame(save.Ghosts);
 
         dataPersistanceObjects = FindDataPersistanceObjects();
 

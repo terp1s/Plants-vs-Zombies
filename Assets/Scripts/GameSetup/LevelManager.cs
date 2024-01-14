@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
 {
     public LevelDatabase levelDatabase;
     public static LevelManager Instance;
+    public Canvas canvas;
 
     private void Awake()
     {
@@ -45,7 +46,17 @@ public class LevelManager : MonoBehaviour
     public void NextLevel()
     {
         PlayerPrefs.SetInt("level" + PlayerPrefs.GetInt("activePlayer"), PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")) + 1);
-        StartCoroutine(Victory());
+
+        if (levelDatabase.lvls.Count == LevelDataProcessor.Instance.levelData.levelIndex)
+        {
+            StartCoroutine(GameEnd());
+            
+        }
+        else
+        {
+            StartCoroutine(Victory());
+
+        }
     }
     IEnumerator LoadNewLevel(int index)
     {
@@ -73,10 +84,13 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(LoadNewLevel(LevelDataProcessor.Instance.levelData.levelIndex + 1));
         Time.timeScale = 1f;
         GameObject.Find("Canvas").transform.Find("Victory").gameObject.SetActive(false);
+
+        yield return null;
+        
     }
     public bool CheckForNextLevel()
     {
-        if (GameObject.FindGameObjectsWithTag("Zombie").Length == 0)
+        if (GameObject.FindGameObjectsWithTag("Ghost").Length == 0)
         {
             NextLevel();
 
@@ -106,5 +120,15 @@ public class LevelManager : MonoBehaviour
                 levelDatabase.lvls[i].unlockedPlants.Add(s);
             }
         }
+    }
+    IEnumerator GameEnd()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+        }
+
+        Time.timeScale = 0f;
+        GameObject.Find("Canvas").transform.Find("GameEnd").gameObject.SetActive(true);
     }
 }

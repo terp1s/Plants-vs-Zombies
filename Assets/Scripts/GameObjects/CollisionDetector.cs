@@ -11,32 +11,34 @@ public class CollisionDetector : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //zombik papa kyticku
+        if (collision.gameObject.name == "Paris(Clone)")
+        {
+            if (collision.gameObject.GetComponent<Animator>().GetBool("HasHead"))
+            {
+                collision.gameObject.GetComponent<Animator>().SetBool("HasHead", false);
+                Destroy(gameObject);
+            }
+        }
         if (collision.collider.CompareTag("Plant"))
         {
             isTouchingPlant = true;
 
-            //opakovana akce s prodlevou
             StartCoroutine(RepeatDmg(collision));
         }      
     }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //hrasek papa zombika
         if (other.gameObject.CompareTag("Ammo"))
         {
             //Zpusobi si damage a znici munici
             gameObject.GetComponent<HealthManager>().Dmg(other.gameObject.GetComponent<HealthManager>().afflDmg);
             Destroy(other.gameObject);
         }
-
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         isTouchingPlant = false;
     }
-
     IEnumerator RepeatDmg(Collision2D collision)
     {
         while (isTouchingPlant)

@@ -16,6 +16,7 @@ public class Move : MonoBehaviour
 
     private Camera cam;
     private GameObject bgr;
+   
 
     void Start()
     {
@@ -24,7 +25,7 @@ public class Move : MonoBehaviour
     }
     void Update()
     {
-        if (gameObject.CompareTag("Zombie"))
+        if (gameObject.CompareTag("Ghost"))
         {
             transform.Translate(Vector2.left * Time.deltaTime * speed);
         }
@@ -35,12 +36,12 @@ public class Move : MonoBehaviour
         
         Vector2 viewPos = cam.WorldToViewportPoint(gameObject.transform.position);
 
-        if (gameObject.CompareTag("Zombie") && viewPos.x < 0.2f)
+        if (gameObject.CompareTag("Ghost") && viewPos.x < 0.2f)
         {
             GameObject.Find("GameManager").GetComponent<GameOver>().gameOver = true;
         }
 
-        if (viewPos.x > 1f || viewPos.x < 0f || viewPos.y > 1.5f || viewPos.y < 0f)
+        if (viewPos.x > 2f || viewPos.x < 0f || viewPos.y > 1.5f || viewPos.y < 0f)
         {
             Destroy(gameObject);  
         }

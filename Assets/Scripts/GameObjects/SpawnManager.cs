@@ -12,8 +12,8 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
     Vector2 vector;
 
     public GameObject zombik;
-    public int zombikStartDelay, zombikRepeatRate;
-    public int zombieCount;
+    public int ghostStartDelay, ghostRepeatRate;
+    public int ghostCount;
 
     public GameObject slunicko;
     public int slunickoStartdelay, slunickoRepeatRate;
@@ -27,30 +27,33 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
         width = vector.x;
         height = vector.y;   
     }
-
     public void Load(LevelData data)
     {
-        zombieCount = data.zombieCount;
+        ghostCount = data.ghostCount;
 
+        Spawning();
+    }
+    public void Spawning()
+    {
         //spawn slunicka
         InvokeRepeating("SpawnSlunicko", slunickoStartdelay, slunickoRepeatRate);
 
         //spawn zombiky
-        InvokeRepeating("SpawnZombik", zombikStartDelay, zombikRepeatRate);
+        InvokeRepeating("SpawnGhost", ghostStartDelay, ghostRepeatRate);
     }
-    public void SpawnZombik()
+    public void SpawnGhost()
     {
-        if(zombieCount > 0)
+        if(ghostCount > 0)
         {
             go = Instantiate(zombik, Background.transform);
-            go.transform.position = new Vector2(width + 1, height - ((Random.Range(1, 6) - 0.4f) * (bgrSquare.transform.lossyScale.y / 5)));
+            go.transform.position = new Vector2(width + 8, height - ((Random.Range(1, 6) - 0.4f) * (bgrSquare.transform.lossyScale.y / 5)));
 
-            zombieCount--;
+            ghostCount--;
         }
         else
         {
             cor = StartCoroutine(CallNextLvl());
-            CancelInvoke("SpawnZombik");
+            CancelInvoke("SpawnGhost");
         }
     }
     IEnumerator  CallNextLvl()

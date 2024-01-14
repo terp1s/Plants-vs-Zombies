@@ -16,7 +16,6 @@ public class PutDown : MonoBehaviour
         enabled = false;
         bgr = gameObject.transform.parent.parent;
     }
-
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -31,7 +30,10 @@ public class PutDown : MonoBehaviour
                 plantFlw.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
                 plantFlw.GetComponent<SpriteRenderer>().sortingLayerName = "Plants";
                 plantFlw.GetComponent<SpriteRenderer>().sortingOrder = 0;
-                plantFlw.GetComponent<ChildSpawn>().enabled = true;
+                if (plantFlw.gameObject.GetComponent<ChildSpawn>() == true)
+                {
+                    plantFlw.gameObject.GetComponent<ChildSpawn>().enabled = true;
+                }
                 hasPlant = true;
 
                 foreach (Transform child in bgr.transform)

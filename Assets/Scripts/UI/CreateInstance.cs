@@ -16,12 +16,10 @@ public class CreateInstance : MonoBehaviour
     private void Start()
     {
         bgr = GameObject.Find("Background");
-        //go = GameObject.Find("BackgroundSquare").transform.Find("Tile00").Find("FullTile00").gameObject;
-        love = GameObject.Find("SunScore");
+        love = GameObject.Find("Score");
     }
     public void OnClick(GameObject prefab)
     {
-        //go.GetComponent<PutDown>().enabled == false
         if (int.Parse(love.GetComponentInChildren<TMP_Text>().text) >= price && !LevelDataProcessor.Instance.isPutEnabled)
         {
             int loveCurr = int.Parse(love.GetComponentInChildren<TMP_Text>().text);
@@ -30,15 +28,17 @@ public class CreateInstance : MonoBehaviour
 
             kyticka = Instantiate(prefab, bgr.transform);
             kyticka.transform.position = gameObject.transform.position;
-            kyticka.gameObject.GetComponent<ChildSpawn>().enabled = false;
+
+            if (kyticka.gameObject.GetComponent<ChildSpawn>() == true)
+            {
+                kyticka.gameObject.GetComponent<ChildSpawn>().enabled = false;
+
+            }
             kyticka.gameObject.GetComponent<FollowMouse>().enabled = true;
             kyticka.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             kyticka.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "MovingObjects";
             kyticka.GetComponent<SpriteRenderer>().sortingOrder = 1;
             LevelDataProcessor.Instance.isPutEnabled = true;
         }
-
-        
     }
-
 }
