@@ -13,7 +13,10 @@ public class MainMenu : MonoBehaviour
     {
         if(PlayerPrefs.HasKey("activePlayer"))
         {
-            LevelManager.Instance.LoadGame(PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")));
+            if (LevelManager.Instance.levelDatabase.lvls.Count > PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")))
+            {
+                LevelManager.Instance.LoadGame(PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")));
+            }
         }
         else
         {
@@ -38,10 +41,7 @@ public class MainMenu : MonoBehaviour
         {
             if (child.name.Contains("Slot"))
             {
-                
-                 child.GetComponentInChildren<TextMeshProUGUI>().text = "Slot " + i;
-                
-
+                child.GetComponentInChildren<TextMeshProUGUI>().text = "Slot " + i;
                 i++;
             }
         }

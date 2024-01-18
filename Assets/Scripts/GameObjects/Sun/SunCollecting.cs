@@ -8,6 +8,7 @@ public class SunCollecting : MonoBehaviour
 {
     public GameObject score;
     public int scoreValue;
+    public AudioClip collect;
     void Start()
     {
         score = GameObject.Find("Score");
@@ -24,6 +25,7 @@ public class SunCollecting : MonoBehaviour
                 Destroy(gameObject);
                 scoreValue += 25;
                 score.GetComponentInChildren<TMP_Text>().text = scoreValue.ToString();
+                SoundManager.instance.PlaySound(collect);
             }
         }
     }

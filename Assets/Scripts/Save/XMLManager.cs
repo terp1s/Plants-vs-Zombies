@@ -12,7 +12,6 @@ public class XMLManager : MonoBehaviour
 {
     public static XMLManager instance;
     public LevelDatabase levelDatabase;
-    public LevelManager levelManager;
     public TextAsset leveldata;
     private void Awake()
     {
@@ -20,7 +19,7 @@ public class XMLManager : MonoBehaviour
         {
             DontDestroyOnLoad(this);
             levelDatabase = Load();
-            levelManager.GetComponent<LevelManager>().LoadDatabase(levelDatabase);
+            LevelManager.Instance.LoadDatabase(levelDatabase);
 
             instance = this;
         }

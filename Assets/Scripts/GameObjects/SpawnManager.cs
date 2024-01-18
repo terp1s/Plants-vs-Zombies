@@ -12,16 +12,17 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
     Vector2 vector;
 
     public GameObject zombik;
-    public int ghostStartDelay, ghostRepeatRate;
+    public float ghostStartDelay, ghostRepeatRate;
     public int ghostCount;
+    public int ghostCountHold;
 
     public GameObject slunicko;
-    public int slunickoStartdelay, slunickoRepeatRate;
+    public float slunickoStartdelay, slunickoRepeatRate;
 
     GameObject go;
     public static Coroutine cor;
-
-    void Start()
+    float round = 1;
+    public void Start()
     {
         vector = bgrSquare.transform.localScale;
         width = vector.x;
@@ -30,16 +31,17 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
     public void Load(LevelData data)
     {
         ghostCount = data.ghostCount;
-
+        ghostCountHold = ghostCount;
         Spawning();
     }
     public void Spawning()
     {
+        
         //spawn slunicka
         InvokeRepeating("SpawnSlunicko", slunickoStartdelay, slunickoRepeatRate);
 
         //spawn zombiky
-        InvokeRepeating("SpawnGhost", ghostStartDelay, ghostRepeatRate);
+        Invoke("SpawnGhost", ghostStartDelay);
     }
     public void SpawnGhost()
     {
@@ -49,6 +51,23 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
             go.transform.position = new Vector2(width + 8, height - ((Random.Range(1, 6) - 0.4f) * (bgrSquare.transform.lossyScale.y / 5)));
 
             ghostCount--;
+
+            if(round < 4)
+            {
+                ghostRepeatRate = 10f + 20f/round;
+            }
+            else if (ghostCount < ghostCountHold/3)
+            {
+                ghostRepeatRate = Random.Range(0, 0.5f);
+            }
+            else
+            {
+                ghostRepeatRate = Random.Range(3, 5);
+            }
+
+            Invoke("SpawnGhost", ghostRepeatRate);
+
+            round++;
         }
         else
         {
@@ -61,7 +80,6 @@ public class SpawnManager : MonoBehaviour, IXMLDataHandlerer
         while (LevelManager.Instance.CheckForNextLevel() == false)
         {
             LevelManager.Instance.CheckForNextLevel();
-
             yield return null;
         }
     }

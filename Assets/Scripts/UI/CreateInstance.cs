@@ -10,6 +10,7 @@ public class CreateInstance : MonoBehaviour
     public GameObject love;
     public GameObject bgr;
     public int price;
+    public AudioClip buy;
 
     public GameObject go;
 
@@ -39,6 +40,8 @@ public class CreateInstance : MonoBehaviour
             kyticka.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "MovingObjects";
             kyticka.GetComponent<SpriteRenderer>().sortingOrder = 1;
             LevelDataProcessor.Instance.isPutEnabled = true;
+
+            SoundManager.instance.PlaySound(buy);
         }
     }
 }

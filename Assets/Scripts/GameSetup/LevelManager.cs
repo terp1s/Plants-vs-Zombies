@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public LevelDatabase levelDatabase;
     public static LevelManager Instance;
     public Canvas canvas;
+    public AudioClip win;
 
     private void Awake()
     {
@@ -47,15 +48,17 @@ public class LevelManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("level" + PlayerPrefs.GetInt("activePlayer"), PlayerPrefs.GetInt("level" + PlayerPrefs.GetInt("activePlayer")) + 1);
 
+        SoundManager.instance.PlaySound(win);
+        SoundManager.instance.ToggleMusic();
+
+
         if (levelDatabase.lvls.Count == LevelDataProcessor.Instance.levelData.levelIndex)
         {
             StartCoroutine(GameEnd());
-            
         }
         else
         {
             StartCoroutine(Victory());
-
         }
     }
     IEnumerator LoadNewLevel(int index)
@@ -68,7 +71,7 @@ public class LevelManager : MonoBehaviour
         }
 
         LoadLevelData(index);
-
+        Time.timeScale = 1f;
         StopAllCoroutines();
     }
     IEnumerator Victory()
@@ -76,9 +79,9 @@ public class LevelManager : MonoBehaviour
         Time.timeScale = 0f;
         GameObject.Find("Canvas").transform.Find("Victory").gameObject.SetActive(true);
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 1; i++)
         {
-            yield return new WaitForSecondsRealtime(1f);
+            yield return new WaitForSecondsRealtime(3.5f);
         }
 
         StartCoroutine(LoadNewLevel(LevelDataProcessor.Instance.levelData.levelIndex + 1));

@@ -45,7 +45,11 @@ public class CollisionDetector : MonoBehaviour
         {
             collision.collider.gameObject.GetComponent<HealthManager>().Dmg(gameObject.GetComponent<HealthManager>().afflDmg);
 
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(1.0f);
+
+            StartCoroutine(RepeatDmg(collision));
         }
+
+        yield return null;
     }
 }

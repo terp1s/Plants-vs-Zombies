@@ -11,6 +11,7 @@ public class PutDown : MonoBehaviour
     public GameObject plantFlw;
     public Transform bgr;
 
+    public AudioClip place;
     private void Awake()
     {
         enabled = false;
@@ -24,6 +25,8 @@ public class PutDown : MonoBehaviour
 
             if (GetComponent<BoxCollider2D>().OverlapPoint(mousePosition) && hasPlant == false)
             {
+
+                SoundManager.instance.PlaySound(place);
                 plantFlw.GetComponent<FollowMouse>().enabled = false;
                 plantFlw.transform.position = transform.position;
                 plantFlw.transform.parent = transform.parent;

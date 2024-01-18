@@ -38,7 +38,10 @@ public class Move : MonoBehaviour
 
         if (gameObject.CompareTag("Ghost") && viewPos.x < 0.2f)
         {
-            GameObject.Find("GameManager").GetComponent<GameOver>().gameOver = true;
+            if(LevelManager.Instance.GetComponent<GameOver>().gameOver == false)
+            {
+                LevelManager.Instance.GetComponent<GameOver>().GameOverScene();
+            }
         }
 
         if (viewPos.x > 2f || viewPos.x < 0f || viewPos.y > 1.5f || viewPos.y < 0f)
